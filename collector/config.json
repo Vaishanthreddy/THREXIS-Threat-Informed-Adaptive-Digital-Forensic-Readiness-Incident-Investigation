@@ -1,0 +1,26 @@
+{
+  "api_url": "http://192.168.56.1:8000/api/v1",
+  "api_key": "threxis-collector-secret-2026",
+  "host_id": "ubuntu-vbox-lab-01",
+  "hostname": "ubuntu-lab",
+  "heartbeat_interval_sec": 10,
+  "batch_flush_interval_sec": 2,
+  "max_batch_size": 10,
+  "sources": [
+    {
+      "key": "auth_log",
+      "path": "/var/log/auth.log",
+      "type": "auth_log"
+    },
+    {
+      "key": "secure_log",
+      "path": "/var/log/secure",
+      "type": "auth_log"
+    },
+    {
+      "key": "syslog",
+      "path": "/var/log/syslog",
+      "type": "syslog"
+    }
+  ]
+}

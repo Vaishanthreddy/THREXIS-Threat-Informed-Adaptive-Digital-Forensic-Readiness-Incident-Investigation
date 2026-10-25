@@ -1,0 +1,16 @@
+[Unit]
+Description=THREXIS Threat-Informed Adaptive Forensic Telemetry Collector
+After=network.target auditd.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/threxis-collector
+ExecStart=/usr/bin/python3 /opt/threxis-collector/threxis_collector.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

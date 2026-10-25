@@ -1,0 +1,28 @@
+# Python virtual environment & cache
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Node & Frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.tmp/
+frontend/*.tsbuildinfo
+
+# Database & local state
+threxis.db
+threxis.db-journal
+.collector_state.json
+vault_storage/
+backend/vault_storage/
+reports/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

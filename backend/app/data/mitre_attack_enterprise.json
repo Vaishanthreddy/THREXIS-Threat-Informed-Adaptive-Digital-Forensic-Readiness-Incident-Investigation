@@ -1,0 +1,142 @@
+[
+  {
+    "id": "T1110",
+    "name": "Brute Force",
+    "tactics": ["Credential Access"],
+    "description": "Adversaries may use brute force techniques to attempt access to accounts when passwords are unknown or when password hashes are unavailable. Without prior knowledge of the password, an adversary may guess passwords using repeated automated or manual attempts.",
+    "subtechniques": [
+      {
+        "id": "T1110.001",
+        "name": "Password Guessing",
+        "description": "Adversaries may systematically guess passwords to gain access without account lockouts."
+      },
+      {
+        "id": "T1110.003",
+        "name": "Password Spraying",
+        "description": "Adversaries may use a single or small list of commonly used passwords against many accounts."
+      }
+    ],
+    "detection_methods": "Monitor authentication logs (such as /var/log/auth.log or journald) for repeated failed login attempts from a single source IP or targeting specific accounts within a short time window. Correlate with subsequent successful logins.",
+    "evidence_sources": [
+      "SSH Authentication Logs (auth.log)",
+      "System Journal Logs (journald)",
+      "Network Connection Records",
+      "User Login/Session Records (utmp/wtmp/btmp)",
+      "Audit Logs (auditd USER_AUTH)"
+    ],
+    "url": "https://attack.mitre.org/techniques/T1110/",
+    "applicable_platforms": ["Linux", "Windows", "macOS", "Cloud"],
+    "primary_data_components": ["Logon Session: Logon Session Creation", "User Account: User Account Authentication"]
+  },
+  {
+    "id": "T1078",
+    "name": "Valid Accounts",
+    "tactics": ["Defense Evasion", "Persistence", "Privilege Escalation", "Initial Access"],
+    "description": "Adversaries may obtain and abuse credentials of existing accounts as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion.",
+    "subtechniques": [
+      {
+        "id": "T1078.001",
+        "name": "Default Accounts",
+        "description": "Adversaries may obtain credentials of default system accounts."
+      },
+      {
+        "id": "T1078.003",
+        "name": "Local Accounts",
+        "description": "Adversaries may obtain and use credentials of local accounts."
+      }
+    ],
+    "detection_methods": "Analyze logouts and logins for anomalous activity such as impossible travel, non-business hours, or sudden administrative activity following authentication failures.",
+    "evidence_sources": [
+      "User Login/Session Records",
+      "SSH Authentication Logs",
+      "Process Execution Logs",
+      "Privilege Escalation Events"
+    ],
+    "url": "https://attack.mitre.org/techniques/T1078/",
+    "applicable_platforms": ["Linux", "Windows", "macOS"],
+    "primary_data_components": ["Logon Session: Logon Session Creation", "User Account: User Account Authentication"]
+  },
+  {
+    "id": "T1021.004",
+    "name": "Remote Services: SSH",
+    "tactics": ["Lateral Movement"],
+    "description": "Adversaries may use Valid Accounts to log into remote machines using Secure Shell (SSH). The adversary may then perform actions as the logged-on user.",
+    "subtechniques": [],
+    "detection_methods": "Monitor for SSH connections originating from unexpected networks or targeting systems that do not usually expose port 22.",
+    "evidence_sources": [
+      "Network Connection Records",
+      "SSH Authentication Logs",
+      "Process Execution Logs (sshd)"
+    ],
+    "url": "https://attack.mitre.org/techniques/T1021/004/",
+    "applicable_platforms": ["Linux", "macOS"],
+    "primary_data_components": ["Network Traffic: Network Connection Creation", "Logon Session: Logon Session Creation"]
+  },
+  {
+    "id": "T1548.003",
+    "name": "Abuse Elevation Control Mechanism: Sudo and Sudo Caching",
+    "tactics": ["Privilege Escalation", "Defense Evasion"],
+    "description": "Adversaries may perform sudo caching and/or use the sudoers file to elevate privileges. In Linux, sudo allows a permitted user to execute a command as the superuser or another user.",
+    "subtechniques": [],
+    "detection_methods": "Audit sudo command executions and monitor /var/log/auth.log or sudo log for unauthorized sudo commands, failed sudo password attempts, or sudoers file changes.",
+    "evidence_sources": [
+      "Privilege Escalation Events (sudo logs)",
+      "Audit Logs (auditd execve)",
+      "Process Execution Logs",
+      "File Modification Events (/etc/sudoers)"
+    ],
+    "url": "https://attack.mitre.org/techniques/T1548/003/",
+    "applicable_platforms": ["Linux", "macOS"],
+    "primary_data_components": ["Command: Command Execution", "Process: Process Creation"]
+  },
+  {
+    "id": "T1059.004",
+    "name": "Command and Scripting Interpreter: Unix Shell",
+    "tactics": ["Execution"],
+    "description": "Adversaries may abuse Unix shell commands and scripting interpreters (bash, sh, zsh) to execute arbitrary commands, payloads, or automated investigation scripts.",
+    "subtechniques": [],
+    "detection_methods": "Monitor process creation events for bash/sh executing with suspicious arguments, base64 payloads, or unexpected parent processes such as web servers or sshd.",
+    "evidence_sources": [
+      "Process Execution Logs",
+      "System Journal Logs",
+      "Audit Logs (auditd SYSCALL)",
+      "User Shell History"
+    ],
+    "url": "https://attack.mitre.org/techniques/T1059/004/",
+    "applicable_platforms": ["Linux", "macOS"],
+    "primary_data_components": ["Process: Process Creation", "Command: Command Execution"]
+  },
+  {
+    "id": "T1046",
+    "name": "Network Service Discovery",
+    "tactics": ["Discovery"],
+    "description": "Adversaries may attempt to get a listing of services running on remote hosts or local network interfaces, including open ports and listening daemons.",
+    "subtechniques": [],
+    "detection_methods": "Monitor network sockets, tcpdump/netstat output, or sudden bursts of SYN packets across multiple ports.",
+    "evidence_sources": [
+      "Network Connection Records",
+      "Process Execution Logs (nmap, ss, netstat)",
+      "System Journal Logs"
+    ],
+    "url": "https://attack.mitre.org/techniques/T1046/",
+    "applicable_platforms": ["Linux", "Windows", "macOS"],
+    "primary_data_components": ["Network Traffic: Network Connection Creation"]
+  },
+  {
+    "id": "T1070.002",
+    "name": "Indicator Removal: Clear Linux or Mac System Logs",
+    "tactics": ["Defense Evasion"],
+    "description": "Adversaries may clear system logs to hide the evidence of an intrusion. For example, clearing /var/log/auth.log, /var/log/syslog, or removing auditd logs.",
+    "subtechniques": [],
+    "detection_methods": "Monitor write/truncate syscalls against files in /var/log or sudden cessation of syslog/journald services.",
+    "evidence_sources": [
+      "File Modification Events",
+      "Audit Logs (auditd)",
+      "Process Execution Logs (rm, truncate, shred)",
+      "System Configuration Evidence"
+    ],
+    "url": "https://attack.mitre.org/techniques/T1070/002/",
+    "applicable_platforms": ["Linux", "macOS"],
+    "primary_data_components": ["File: File Deletion", "File: File Modification"]
+  }
+]
