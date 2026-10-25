@@ -1,0 +1,12 @@
+{
+  "name": "threxis-project",
+  "version": "1.0.0",
+  "private": true,
+  "description": "THREXIS Threat-Informed Adaptive Digital Forensic Readiness & Incident Investigation System",
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "frontend": "npm --prefix frontend run dev",
+    "backend": "venv\\Scripts\\python -m uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload"
+  }
+}
